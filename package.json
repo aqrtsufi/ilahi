@@ -1,6 +1,6 @@
 {
   "name": "ilahi-app",
-  "version": "8.3.8",
+  "version": "8.3.9",
   "private": true,
   "scripts": {
     "increment-version": "node incrementVersion.mjs",

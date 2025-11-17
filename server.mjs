@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 app.get('/read-song', async (req, res) => {
-  const url = 'https://raw.githubusercontent.com/yashineonline/ilahiRepository/main/ilahiSZ.txt';
+  const url = 'https://raw.githubusercontent.com/yashineonline/ilahiRepository/main/ilahi.txt';
   const response = await fetch(url);
   const data = await response.text();
   res.send(data);

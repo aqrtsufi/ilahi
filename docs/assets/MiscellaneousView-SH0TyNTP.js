@@ -1,0 +1,1 @@
+import{d as s,e as t,g as n,s as a,k as o}from"./vue-BEpEtYa0.js";const c=s({__name:"MiscellaneousView",setup(l){return(r,e)=>(o(),t("div",null,e[0]||(e[0]=[n("h1",null,"Miscellaneous",-1),a(" test run ")])))}});export{c as default};

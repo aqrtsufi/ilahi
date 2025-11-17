@@ -17,7 +17,10 @@ export function processSong(song: SongData): SongData {
   return {
     ...song,
     lyrics: processStanzas(song.lyrics),
-    translation: song.translation ? processStanzas(song.translation) : undefined
+    translation: song.translation ? processStanzas(song.translation) : undefined,
+    history: song.history ? processStanzas(song.history) : undefined, // add this
+
+
   };
 }
 
@@ -439,7 +442,7 @@ const aggregatedZikrs: ParsedZikr = {}; // This should be the grouped collection
       const historyText = lines.slice(historyStart).join('\n');
       history = splitStanzas(historyText);
       // const historyStanzas = splitStanzas(historyText);
-      // lyrics.push(...historyStanzas);
+       lyrics.push(...history);
     }
 
     const slug = slugify(title);
@@ -448,8 +451,8 @@ const aggregatedZikrs: ParsedZikr = {}; // This should be the grouped collection
       title,
       lyrics,
       translation,
-      pronunciation, // Add pronunciation to returned object
       history,
+      pronunciation, // Add pronunciation to returned object
       mainLinks,
       alternateTunes,
       order: songOrder,

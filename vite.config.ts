@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
@@ -13,27 +14,32 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      registerType: 'autoUpdate',
-      devOptions: { enabled: true },
+      registerType: 'autoUpdate', // important: auto update when a new SW is available
+      devOptions: { enabled: false },
       workbox: {
-        clientsClaim: true,
-        skipWaiting: true, // Immediately activates new service worker
+        // clientsClaim: true,
+        // this comment is backwards: `false` means "don't force", but
+  // with registerType: 'autoUpdate' the plugin will set it to true anyway
+ 
+        // skipWaiting: false, 
         cleanupOutdatedCaches: true, // Remove old caches
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api\//, /\.[^/]+$/],
         runtimeCaching: [
           {
-            // Cache GitHub content API responses for songs data
+      // GitHub API for songs: always try network first, but keep a cache
+
             urlPattern: ({ url }) => url.origin === 'https://api.github.com' && /\/repos\/yashineonline\/ilahiRepository\/contents\//.test(url.pathname),
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'github-content',
+              networkTimeoutSeconds: 5, // if network is too slow, fall back to cache
+              cacheableResponse: { statuses: [0, 200] },
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
               },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
         ],

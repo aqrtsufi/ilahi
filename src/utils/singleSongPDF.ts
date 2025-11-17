@@ -128,8 +128,11 @@ drawBorder(page)
   y -= 40;
 
   // Draw lyrics
+  const lyricsWithoutHistory = song.lyrics.filter(st => !st.some(l => l.startsWith('History:')));
+  let result = drawSection(page, lyricsWithoutHistory, font, y, width, pdfDoc, contentMargin, drawBorder);
+
   // let result = drawSection(page, song.lyrics, font, y, width, pdfDoc, contentMargin);
-  let result = drawSection(page, song.lyrics, font, y, width, pdfDoc, contentMargin, drawBorder);
+  // let result = drawSection(page, song.lyrics, font, y, width, pdfDoc, contentMargin, drawBorder);
   y = result.currentY;
   page = result.page;
   if (!pages.includes(page)) pages.push(page);
@@ -153,21 +156,29 @@ drawBorder(page)
     y = result.currentY;
     page = result.page;
   }
-  console.log('testing if this runs:', song.translation);
-// History (paginate like translation)
-if (song.history && song.history.length > 0) {
-  y -= 20;
-  y = drawUnicodeText(page, 'History', {
-    x: width / 2, y, size: 18, font, color: rgb(0, 0, 0), align: 'center'
-  });
-  y -= 20;
-  console.log('testing if historypagination runs:', song.history);
-  result = drawSection(page, song.history, font, y, width, pdfDoc, contentMargin, drawBorder);
+
+
+// History derived from lyrics, split into paragraph-stanzas so it can page-break cleanly
+const historyIdx = song.lyrics.findIndex(st => st.some(l => l.startsWith('History:')));
+if (historyIdx !== -1) {
+  const historyLines = song.lyrics[historyIdx];
+  const paragraphs: string[][] = [];
+  let current: string[] = [];
+  for (const line of historyLines) {
+    if (line.trim() === '') {
+      if (current.length) { paragraphs.push(current); current = []; }
+    } else {
+      current.push(line);
+    }
+  }
+  if (current.length) paragraphs.push(current);
+
+  // small gap; no forced new page
+  y -= 12;
+  result = drawSection(page, paragraphs, font, y, width, pdfDoc, contentMargin, drawBorder);
   y = result.currentY;
   page = result.page;
 }
-
-
   
   // Generate and draw QR code
   const qrCodeDataUrl = await generateQRCode(`https://ilahiapp.com/songs/${song.slug}`);

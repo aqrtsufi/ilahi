@@ -1,3 +1,4 @@
+// main.ts
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import YouTube from 'vue3-youtube'
@@ -46,17 +47,31 @@ app.use(router)
 // Initialize global hyperlink handling
 // initializeGlobalHyperlinks();
 
+if (import.meta.env.PROD) {
 const updateSW = registerSW({
   immediate: true,
-  onNeedRefresh() {
-    window.showGlobalToast?.('New version available. Tap to update.', () => {
-      updateSW(true);
-    });
-  },
-  onOfflineReady() {
-    window.showGlobalToast?.('App is ready to work offline.', () => {});
-  },
+  onNeedRefresh: () => window.showGlobalToast?.('New version available. Tap to update.', () => updateSW(true)),
+  onOfflineReady: () => window.showGlobalToast?.('App is ready to work offline.'),
 });
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    navigator.serviceWorker?.getRegistrations().then(rs => rs.forEach(r => r.update()));
+  }
+});
+}
+
+
+
+//   onNeedRefresh() {
+//     window.showGlobalToast?.('New version available. Tap to update.', () => {
+//       updateSW(true);
+//     });
+//   },
+//   onOfflineReady() {
+//     window.showGlobalToast?.('App is ready to work offline.', () => {});
+//   },
+// });
 
 
 // Register/unregister Service Worker depending on env
@@ -151,11 +166,7 @@ if (import.meta.env.PROD) {
 // }
 
 // ...
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && 'serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.update()));
-  }
-});
+
 
 app.mount('#app')
 

@@ -21,7 +21,7 @@
     role="group" 
     aria-label="Filter ilahis by first letter">
   <button
-    v-for="letter in 'ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVYZ'"
+    v-for="letter in 'ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ'"
     :key="letter"
     @click="filterByLetter(letter)"
     @keydown="handleKeyNavigation($event, letter)"

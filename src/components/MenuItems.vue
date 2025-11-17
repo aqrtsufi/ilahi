@@ -9,15 +9,15 @@
   >
       <li><router-link to="/zikr-practice" class="btn btn-ghost btn-sm">Zikr Practice</router-link></li>
       <li><router-link to="/wirds" class="btn btn-ghost btn-sm">Wird Slide</router-link></li>
-      <li><router-link to="/book" class="btn btn-ghost btn-sm">Download ilahi Book</router-link></li>
-      <li><router-link to="/about" class="btn btn-ghost btn-sm">About ilahi</router-link></li>
+      <li><router-link to="/poems" class="btn btn-ghost btn-sm">Poems</router-link></li>
+      <li><router-link to="/books" class="btn btn-ghost btn-sm">Other ilahi Books</router-link></li>
+      <li><router-link to="/miscellaneous" class="btn btn-ghost btn-sm">Miscellaneous</router-link></li>
       <li><button 
         @click="() => { handleIlahiClassesClick(); emit('menu-item-click') }"
         class="btn btn-ghost btn-sm w-full text-left">Join ilahi Community</button></li>
       <li><router-link to="/history" class="btn btn-ghost btn-sm">History</router-link></li>
-      <li><router-link to="/poems" class="btn btn-ghost btn-sm">Poems</router-link></li>
-      <li><router-link to="/books" class="btn btn-ghost btn-sm">Other ilahi Books</router-link></li>
-      <li><router-link to="/miscellaneous" class="btn btn-ghost btn-sm">Miscellaneous</router-link></li>
+      <li><router-link to="/book" class="btn btn-ghost btn-sm">Download ilahi Book</router-link></li>
+      <li><router-link to="/about" class="btn btn-ghost btn-sm">About ilahi</router-link></li>
     </ul>
   </template>
   

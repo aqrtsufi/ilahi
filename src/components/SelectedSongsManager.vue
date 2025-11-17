@@ -22,7 +22,8 @@
             :min="1"
             :max="localSelectedSongs.length"
             :aria-label="`Order for ${song.title}`"
-            v-model.number="song.order"
+             v-model.lazy.number="song.order"
+            @focus="isEditing = true"
             @change="onOrderCommit(index)"
             @blur="onOrderCommit(index)"
           />
@@ -60,9 +61,13 @@
     props.selectedSongs.map((song, i) => ({ ...song, order: song.order ?? i + 1 }))
   );
   
-  watch(() => props.selectedSongs, (newSongs) => {
+  const isEditing = ref(false);
+
+
+  watch(() => props.selectedSongs, (newSongs, oldSongs) => {
+    if (isEditing.value || newSongs === oldSongs) return; // don’t reset while editing
     localSelectedSongs.value = newSongs.map((song, i) => ({ ...song, order: song.order ?? i + 1 }));
-  }, { deep: true });
+  }, { deep: false });
   
   function clamp(n: number, min: number, max: number) {
     return Math.max(min, Math.min(max, n));
@@ -81,6 +86,7 @@
     const n = Number(localSelectedSongs.value[index].order);
     localSelectedSongs.value[index].order = clamp(isFinite(n) ? Math.round(n) : index + 1, 1, localSelectedSongs.value.length);
     normalizeAndEmit();
+    isEditing.value = false;
   }
   
   function removeSong(index: number) {
